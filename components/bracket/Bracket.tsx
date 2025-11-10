@@ -81,6 +81,7 @@ export default function Bracket({ bracketState, onScoreChange }: BracketProps) {
                         primaryColor={primaryColor}
                         secondaryColor={secondaryColor}
                         isDarkTheme={isDarkTheme}
+                        numberOfTeams={settings.numberOfTeams}
                       />
                     </div>
                   ))}
