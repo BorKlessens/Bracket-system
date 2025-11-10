@@ -11,6 +11,8 @@ interface SidebarProps {
   onResetBracket: () => void;
   isDarkTheme: boolean;
   bracketState?: BracketState;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
 export default function Sidebar({ 
@@ -18,9 +20,15 @@ export default function Sidebar({
   onSettingsChange, 
   onResetBracket, 
   isDarkTheme,
-  bracketState 
+  bracketState,
+  isCollapsed: externalCollapsed,
+  onToggleCollapse
 }: SidebarProps) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isMobileCollapsed, setIsMobileCollapsed] = useState(false);
+  
+  // Use external collapsed state if provided, otherwise use internal for mobile
+  const isCollapsed = externalCollapsed !== undefined ? externalCollapsed : isMobileCollapsed;
+  const toggleCollapse = onToggleCollapse || (() => setIsMobileCollapsed(!isMobileCollapsed));
 
   const updateSetting = <K extends keyof BracketSettings>(
     key: K, 
@@ -77,10 +85,11 @@ export default function Sidebar({
             Tournament Settings
           </h2>
           <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className={`lg:hidden p-2 rounded ${
+            onClick={toggleCollapse}
+            className={`p-2 rounded transition-colors ${
               isDarkTheme ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
             }`}
+            aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
             <span className={`text-lg ${isDarkTheme ? 'text-white' : 'text-gray-900'}`}>
               {isCollapsed ? '→' : '←'}
@@ -113,7 +122,7 @@ export default function Sidebar({
           </label>
           <select
             value={settings.numberOfTeams}
-            onChange={(e) => updateSetting('numberOfTeams', parseInt(e.target.value) as 4 | 8 | 16 | 32)}
+            onChange={(e) => updateSetting('numberOfTeams', parseInt(e.target.value) as 4 | 8 | 16)}
             className={`w-full px-3 py-2 rounded-lg border ${
               isDarkTheme 
                 ? 'bg-gray-700 text-white border-gray-600 focus:border-blue-500' 
@@ -123,7 +132,6 @@ export default function Sidebar({
             <option value={4}>4 Teams</option>
             <option value={8}>8 Teams</option>
             <option value={16}>16 Teams</option>
-            <option value={32}>32 Teams</option>
           </select>
         </div>
 
@@ -226,7 +234,7 @@ export default function Sidebar({
                   type="text"
                   value={team.name}
                   onChange={(e) => updateTeamName(index, e.target.value)}
-                  className={`flex-1 px-2 py-1 rounded border ${
+                  className={`flex-1 px-2 py-0.5 rounded border ${
                     isDarkTheme 
                       ? 'bg-gray-700 text-white border-gray-600' 
                       : 'bg-white text-gray-900 border-gray-300'
@@ -234,7 +242,7 @@ export default function Sidebar({
                 />
                 <button
                   onClick={() => removeTeam(index)}
-                  className={`px-2 py-1 text-sm rounded ${
+                  className={`px-2 py-0.5 text-sm rounded ${
                     isDarkTheme 
                       ? 'bg-red-600 text-white hover:bg-red-700' 
                       : 'bg-red-500 text-white hover:bg-red-600'
@@ -286,12 +294,12 @@ export default function Sidebar({
   return (
     <div className={`${isDarkTheme ? 'bg-gray-800' : 'bg-white'} border-r ${
       isDarkTheme ? 'border-gray-700' : 'border-gray-200'
-    }`}>
+    } h-full relative overflow-hidden`}>
       {/* Mobile toggle button */}
       <div className="lg:hidden">
-        {isCollapsed ? (
+        {isMobileCollapsed ? (
           <button
-            onClick={() => setIsCollapsed(false)}
+            onClick={() => setIsMobileCollapsed(false)}
             className={`fixed top-4 left-4 z-50 p-3 rounded-lg shadow-lg ${
               isDarkTheme ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'
             }`}
@@ -299,7 +307,7 @@ export default function Sidebar({
             ⚙️
           </button>
         ) : (
-          <div className="fixed inset-0 z-40 bg-black bg-opacity-50" onClick={() => setIsCollapsed(true)}>
+          <div className="fixed inset-0 z-40 bg-black bg-opacity-50" onClick={() => setIsMobileCollapsed(true)}>
             <div className="w-80 h-full" onClick={(e) => e.stopPropagation()}>
               {sidebarContent}
             </div>
@@ -308,8 +316,22 @@ export default function Sidebar({
       </div>
       
       {/* Desktop sidebar */}
-      <div className="hidden lg:block w-80 h-full">
-        {sidebarContent}
+      <div className="hidden lg:block h-full relative">
+        {!isCollapsed ? (
+          <div className="w-80 h-full transition-all duration-300">
+            {sidebarContent}
+          </div>
+        ) : (
+          <button
+            onClick={toggleCollapse}
+            className={`h-full w-12 flex items-center justify-center p-2 transition-all ${
+              isDarkTheme ? 'bg-gray-800 text-white hover:bg-gray-700' : 'bg-white text-gray-900 hover:bg-gray-50'
+            }`}
+            aria-label="Expand sidebar"
+          >
+            <span className="text-xl">⚙️</span>
+          </button>
+        )}
       </div>
     </div>
   );

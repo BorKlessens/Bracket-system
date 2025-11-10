@@ -32,28 +32,6 @@ export default function Bracket({ bracketState, onScoreChange }: BracketProps) {
     return `Round ${round}`;
   };
 
-  // Get gap sizes based on number of teams
-  const getGapSizes = () => {
-    if (settings.numberOfTeams === 4) {
-      return {
-        roundGap: 'gap-6 md:gap-8',
-        matchGap: 'gap-4 md:gap-5'
-      };
-    } else if (settings.numberOfTeams === 8) {
-      return {
-        roundGap: 'gap-4 md:gap-6',
-        matchGap: 'gap-3 md:gap-4'
-      };
-    } else { // 16 teams
-      return {
-        roundGap: 'gap-3 md:gap-4',
-        matchGap: 'gap-2 md:gap-3'
-      };
-    }
-  };
-
-  const gapSizes = getGapSizes();
-
   return (
     <div className={`flex-1 p-6 ${isDarkTheme ? 'esports-gradient' : 'esports-gradient-light'} min-h-screen dark-scrollbar`}>
       {/* Tournament Title */}
@@ -70,26 +48,22 @@ export default function Bracket({ bracketState, onScoreChange }: BracketProps) {
 
       {/* Bracket Container */}
       <div className="flex justify-center w-full">
-        <div className={`flex flex-row ${gapSizes.roundGap} pb-2 md:pb-4 py-2 md:py-4 px-2 md:px-3 rounded-2xl overflow-x-auto ${
+        <div className={`flex flex-row gap-6 md:gap-8 pb-6 md:pb-12 py-6 md:py-16 px-4 md:px-8 rounded-2xl w-full max-w-7xl overflow-x-auto ${
           isDarkTheme ? 'bg-blue-900' : 'bg-gray-100'
         }`} style={{
           backgroundImage: 'url(/bracket-bg.png)',
-          backgroundSize: '100% auto',
-          backgroundPosition: 'center top',
-          backgroundRepeat: 'no-repeat',
-          width: '100%',
-          maxWidth: '1400px',
-          minHeight: '750px',
-          height: '750px'
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
         }}>
-          {rounds.map((round) => (
+          {rounds.map((round, roundIndex) => (
             <React.Fragment key={round}>
               {/* Round Column */}
-              <div className={`flex flex-col items-center flex-shrink-0 min-w-[110px] md:min-w-0 ${
+              <div className={`flex flex-col items-center flex-shrink-0 min-w-[180px] md:min-w-0 ${
                 round >= rounds.length - 2 ? 'justify-center' : ''
               }`}>
                 {/* Round Title */}
-                <div className={`text-[10px] md:text-xs font-bold mb-0.5 md:mb-1 px-1.5 md:px-2 py-0.5 md:py-1 rounded-lg hover-lift ${
+                <div className={`text-sm md:text-lg font-bold mb-2 md:mb-4 px-3 md:px-4 py-2 md:py-2 rounded-lg hover-lift ${
                   isDarkTheme 
                     ? 'bg-gray-800 text-white border border-gray-700 neon-glow-blue' 
                     : 'bg-white text-gray-900 border border-gray-200 shadow-lg'
@@ -98,8 +72,8 @@ export default function Bracket({ bracketState, onScoreChange }: BracketProps) {
                 </div>
 
                 {/* Matches in this round */}
-                <div className={`flex flex-col ${gapSizes.matchGap}`}>
-                  {matchesByRound[round].map((match) => (
+                <div className="flex flex-col gap-10 md:gap-12">
+                  {matchesByRound[round].map((match, matchIndex) => (
                     <div key={match.id}>
                       <Match
                         match={match}
@@ -107,7 +81,6 @@ export default function Bracket({ bracketState, onScoreChange }: BracketProps) {
                         primaryColor={primaryColor}
                         secondaryColor={secondaryColor}
                         isDarkTheme={isDarkTheme}
-                        numberOfTeams={settings.numberOfTeams}
                       />
                     </div>
                   ))}

@@ -16,12 +16,15 @@ export interface Match {
 }
 
 export interface BracketSettings {
-  numberOfTeams: 4 | 8 | 16 | 32;
+  numberOfTeams: 4 | 8 | 16;
   teams: Team[];
   primaryColor: string;
   secondaryColor: string;
   isDarkTheme: boolean;
   tournamentTitle: string;
+  bracketBackgroundColor: string;
+  bracketBackgroundSecondary: string;
+  bracketBackgroundPattern: 'gradient' | 'solid' | 'pattern';
 }
 
 export interface BracketState {

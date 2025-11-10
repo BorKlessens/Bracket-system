@@ -35,6 +35,7 @@ export default function BracketLayout() {
   const [bracketState, setBracketState] = useState<BracketState>(() => 
     createInitialBracketState(defaultSettings)
   );
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   // Load settings from localStorage on mount
   useEffect(() => {
@@ -83,13 +84,17 @@ export default function BracketLayout() {
       bracketState.settings.isDarkTheme ? 'bg-gray-900' : 'bg-gray-100'
     }`}>
       {/* Sidebar */}
-      <div className="flex-shrink-0">
+      <div className={`flex-shrink-0 transition-all duration-300 ${
+        sidebarCollapsed ? 'w-12' : 'w-80'
+      }`}>
         <Sidebar
           settings={bracketState.settings}
           onSettingsChange={handleSettingsChange}
           onResetBracket={handleResetBracket}
           isDarkTheme={bracketState.settings.isDarkTheme}
           bracketState={bracketState}
+          isCollapsed={sidebarCollapsed}
+          onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
         />
       </div>
 

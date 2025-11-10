@@ -1,4 +1,4 @@
-import { Team, Match, BracketSettings, BracketState } from './types';
+import { Match, BracketSettings, BracketState } from './types';
 
 export function generateInitialMatches(settings: BracketSettings): Match[] {
   const { numberOfTeams, teams } = settings;

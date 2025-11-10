@@ -9,6 +9,11 @@
   --neon-green: #10b981;
   --neon-red: #ef4444;
   --neon-yellow: #f59e0b;
+  
+  /* Bracket background colors */
+  --bracket-bg-primary: #1e40af;
+  --bracket-bg-secondary: #3b82f6;
+  --bracket-bg-pattern: 'gradient';
 }
 
 @theme inline {
@@ -79,6 +84,22 @@ body {
 
 .esports-gradient-light {
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+}
+
+/* Bracket background patterns */
+.bracket-bg-gradient {
+  background: linear-gradient(135deg, var(--bracket-bg-primary) 0%, var(--bracket-bg-secondary) 100%);
+}
+
+.bracket-bg-solid {
+  background: var(--bracket-bg-primary);
+}
+
+.bracket-bg-pattern {
+  background: 
+    radial-gradient(circle at 20% 80%, var(--bracket-bg-primary) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, var(--bracket-bg-secondary) 0%, transparent 50%),
+    linear-gradient(135deg, var(--bracket-bg-primary) 0%, var(--bracket-bg-secondary) 100%);
 }
 
 /* Animation for loading states */
