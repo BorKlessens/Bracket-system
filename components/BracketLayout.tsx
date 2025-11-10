@@ -28,7 +28,10 @@ const defaultSettings: BracketSettings = {
   primaryColor: '#3B82F6', // Blue
   secondaryColor: '#EF4444', // Red
   isDarkTheme: true,
-  tournamentTitle: 'CS:GO Summer Cup 2025'
+  tournamentTitle: 'CS:GO Summer Cup 2025',
+  bracketBackgroundColor: '#1e40af',
+  bracketBackgroundSecondary: '#3b82f6',
+  bracketBackgroundPattern: 'gradient'
 };
 
 export default function BracketLayout() {
@@ -37,13 +40,26 @@ export default function BracketLayout() {
   );
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
+  // Helper function to merge saved settings with defaults
+  const mergeSettingsWithDefaults = (saved: any): BracketSettings => {
+    return {
+      ...defaultSettings,
+      ...saved,
+      // Ensure required fields are present
+      bracketBackgroundColor: saved.bracketBackgroundColor || defaultSettings.bracketBackgroundColor,
+      bracketBackgroundSecondary: saved.bracketBackgroundSecondary || defaultSettings.bracketBackgroundSecondary,
+      bracketBackgroundPattern: saved.bracketBackgroundPattern || defaultSettings.bracketBackgroundPattern,
+    };
+  };
+
   // Load settings from localStorage on mount
   useEffect(() => {
     const savedSettings = localStorage.getItem('bracket-settings');
     if (savedSettings) {
       try {
         const parsedSettings = JSON.parse(savedSettings);
-        setBracketState(createInitialBracketState(parsedSettings));
+        const mergedSettings = mergeSettingsWithDefaults(parsedSettings);
+        setBracketState(createInitialBracketState(mergedSettings));
       } catch (error) {
         console.error('Failed to parse saved settings:', error);
       }

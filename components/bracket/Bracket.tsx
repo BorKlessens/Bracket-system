@@ -56,7 +56,7 @@ export default function Bracket({ bracketState, onScoreChange }: BracketProps) {
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
         }}>
-          {rounds.map((round, roundIndex) => (
+          {rounds.map((round) => (
             <React.Fragment key={round}>
               {/* Round Column */}
               <div className={`flex flex-col items-center flex-shrink-0 min-w-[180px] md:min-w-0 ${
@@ -73,7 +73,7 @@ export default function Bracket({ bracketState, onScoreChange }: BracketProps) {
 
                 {/* Matches in this round */}
                 <div className="flex flex-col gap-10 md:gap-12">
-                  {matchesByRound[round].map((match, matchIndex) => (
+                  {matchesByRound[round].map((match) => (
                     <div key={match.id}>
                       <Match
                         match={match}
