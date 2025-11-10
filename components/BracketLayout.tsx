@@ -41,7 +41,7 @@ export default function BracketLayout() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   // Helper function to merge saved settings with defaults
-  const mergeSettingsWithDefaults = (saved: any): BracketSettings => {
+  const mergeSettingsWithDefaults = (saved: Partial<BracketSettings>): BracketSettings => {
     return {
       ...defaultSettings,
       ...saved,
@@ -57,7 +57,7 @@ export default function BracketLayout() {
     const savedSettings = localStorage.getItem('bracket-settings');
     if (savedSettings) {
       try {
-        const parsedSettings = JSON.parse(savedSettings);
+        const parsedSettings = JSON.parse(savedSettings) as Partial<BracketSettings>;
         const mergedSettings = mergeSettingsWithDefaults(parsedSettings);
         setBracketState(createInitialBracketState(mergedSettings));
       } catch (error) {

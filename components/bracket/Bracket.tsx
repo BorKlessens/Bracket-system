@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { BracketState, Match as MatchType } from './types';
-import Match from './Match';
+import { BracketState, Match as MatchType } from '../types';
+import Match from '../Match';
 
 interface BracketProps {
   bracketState: BracketState;
@@ -14,7 +14,7 @@ export default function Bracket({ bracketState, onScoreChange }: BracketProps) {
   const { primaryColor, secondaryColor, isDarkTheme, tournamentTitle } = settings;
 
   // Group matches by round
-  const matchesByRound = matches.reduce((acc, match) => {
+  const matchesByRound = matches.reduce((acc: Record<number, MatchType[]>, match: MatchType) => {
     if (!acc[match.round]) {
       acc[match.round] = [];
     }
